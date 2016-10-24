@@ -72,13 +72,13 @@
       color: #000;
   }
   .modal-header, h4, .close {
-      background-color: #333;
+      background-color: limegreen;
       color: #fff !important;
       text-align: center;
       font-size: 30px;
   }
   .modal-header, .modal-body {
-      padding: 40px 50px;
+      padding: 30px 40px;
   }
   .nav-tabs li a {
       color: #777;

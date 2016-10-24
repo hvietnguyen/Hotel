@@ -45,14 +45,14 @@
     </div>
 </div>
 
-<div id="book" class="bg-1">
+<div id="booking" class="bg-1">
     <div class="container">
         <h3 class="text-center">Room Booking</h3>
         <p class="text-center">We have rooms.<br> You can book your room here!</p>
 
         <ul class="list-group">
-            <li class="list-group-item">Single Room <span class="label label-danger">Sold Out!</span></li>
-            <li class="list-group-item">Double Room <span class="label label-danger">Sold Out!</span></li>
+            <li class="list-group-item">Single Room <span class="label label-danger">No Vacancy!</span></li>
+            <li class="list-group-item">Double Room <span class="label label-danger">No Vacancy!</span></li>
             <li class="list-group-item">Superior Room <span class="badge">3</span></li>
         </ul>
 
@@ -62,7 +62,7 @@
                     <img src="~/Images/img2.jpg" alt="Single Room" width="400" height="300">
                     <p><strong>Single Room</strong></p>
                     <p>$150/night</p>
-                    <button class="btn" data-toggle="modal" data-target="#myModal">Booking</button>
+                    <button class="btn" id="single" data-toggle="modal" data-target="#bookingInfo">Booking</button>
                 </div>
             </div>
             <div class="col-sm-4">
@@ -70,7 +70,7 @@
                     <img src="~/Images/img1.jpg" alt="Double Room" width="400" height="300">
                     <p><strong>Double Room</strong></p>
                     <p>$250/night</p>
-                    <button class="btn" data-toggle="modal" data-target="#myModal">Booking</button>
+                    <button class="btn" id="double" data-toggle="modal" data-target="#bookingInfo">Booking</button>
                 </div>
             </div>
             <div class="col-sm-4">
@@ -78,43 +78,93 @@
                     <img src="~/Images/img3.jpg" alt="Superior Room" width="400" height="300">
                     <p><strong>Superior Room</strong></p>
                     <p>$400/night</p>
-                    <button class="btn" data-toggle="modal" data-target="#myModal">Booking</button>
+                    <button class="btn" id="superior" data-toggle="modal" data-target="#bookingInfo">Booking</button>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal fade" id="bookingInfo" role="dialog">
         <div class="modal-dialog">
-
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">×</button>
-                    <h4><span class="glyphicon glyphicon-lock"></span> Tickets</h4>
+                    <button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove-circle"></span></button>
+                    <h4><span class="glyphicon glyphicon-briefcase"></span> Booking</h4>
                 </div>
                 <div class="modal-body">
-                    <form role="form">
-                        <div class="form-group">
-                            <label for="psw"><span class="glyphicon glyphicon-shopping-cart"></span> Tickets, $23 per person</label>
-                            <input type="number" class="form-control" id="psw" placeholder="How many?">
+                    <p><span class="glyphicon glyphicon-asterisk text-danger"></span> is not empty!</p>
+                    <form id="myForm" role="form">
+                        <!--Personal Info-->
+                        <!--First name-->
+                        <div id="form1">
+                            <div class="form-group">
+                                <label for="firstName"><span class="glyphicon glyphicon-user"></span> First Name <span class="glyphicon glyphicon-asterisk text-danger"></span></label>
+                                <input type="text" class="form-control" id="firstName" placeholder="Enter first name" required/>
+                            </div>
+                            <!--last name-->
+                            <div class="form-group">
+                                <label for="lastName"><span class="glyphicon glyphicon-user"></span> Last Name <span class="glyphicon glyphicon-asterisk text-danger"></span></label>
+                                <input type="text" class="form-control" id="lastName" placeholder="Enter Last name" required/>
+                            </div>
+                            <!--Person Identity-->
+                            <div class="form-group">
+                                <label for="personIdentity"><span class="glyphicon glyphicon-user"></span> Person Identity <span class="glyphicon glyphicon-asterisk text-danger"></span></label>
+                                <input type="text" class="form-control" id="personIdentity" placeholder="Enter passport number, driver licence, etc..." required/>
+                            </div>
+                            <!--Contact number-->
+                            <div class="form-group">
+                                <label for="contactNumber"><span class="glyphicon glyphicon-earphone"></span> Contact number</label>
+                                <input type="tel" class="form-control" id="contactNumber" placeholder="Enter contact number" />
+                            </div>
+                            <!--Email-->
+                            <div class="form-group">
+                                <label for="email"><span class="glyphicon glyphicon-envelope"></span> Email</label>
+                                <input type="email" class="form-control" id="email" placeholder="Enter email" />
+                            </div>
+                            <!--Address-->
+                            <div class="form-group">
+                                <label for="address"><span class="glyphicon glyphicon-home"></span> Address</label>
+                                <input type="text" class="form-control" id="address" placeholder="Enter address" />
+                            </div>
+                            <!--City-->
+                            <div class="form-group">
+                                <label for="city"><span class="glyphicon glyphicon-home"></span> City</label>
+                                <input type="text" class="form-control" id="city" placeholder="Enter city name" />
+                            </div>
+                            <!--Country-->
+                            <div class="form-group">
+                                <label for="country"><span class="glyphicon glyphicon-home"></span> Country</label>
+                                <input type="text" class="form-control" id="country" placeholder="Enter country name" />
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="usrname"><span class="glyphicon glyphicon-user"></span> Send To</label>
-                            <input type="text" class="form-control" id="usrname" placeholder="Enter email">
+                        
+                        <div id="form2">
+                            <div class="form-group">
+                                <input type="radio" name="organisation" value="Y" checked> Organisation
+                                <input type="radio" name="organisation" value="N"> Individual
+                            </div>
                         </div>
-                        <button type="submit" class="btn btn-block">
-                            Pay
+
+                        <button id="continue" class="btn btn-block">
+                            Continue
+                            <span class="glyphicon glyphicon-circle-arrow-right"></span>
+                        </button>
+                        <button id="submit" class="btn btn-block">
+                            Submit
                             <span class="glyphicon glyphicon-ok"></span>
                         </button>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal">
+                    <button id="cancel" class="btn btn-default pull-right" data-dismiss="modal">
                         <span class="glyphicon glyphicon-remove"></span> Cancel
                     </button>
-                    <p>Need <a href="#">help?</a></p>
+                    <button id="goBack" class="btn btn-default pull-left">
+                        <span class="glyphicon glyphicon-arrow-left"></span> Back
+                    </button>
+                    <!--<p>Need <a href="#">help?</a></p>-->
                 </div>
             </div>
         </div>
