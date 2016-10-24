@@ -77,3 +77,8 @@ function showForm2() {
     $("#submit").show();
     $("#goBack").show();
 }
+
+function showFullForm() {
+    $("#form1").show();
+    $("#form2").show();
+}

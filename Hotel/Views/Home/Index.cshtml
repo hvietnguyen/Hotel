@@ -2,7 +2,7 @@
     ViewBag.Title = "Home Page";
 }
 
-<!-- Container -->
+<!--About-->
 <div id="about" class="container text-center">
     <h3>ABOUT HOTEL</h3>
     <p><em>We love our Customer!</em></p>
@@ -45,6 +45,7 @@
     </div>
 </div>
 
+<!--Booking-->
 <div id="booking" class="bg-1">
     <div class="container">
         <h3 class="text-center">Room Booking</h3>
@@ -95,56 +96,38 @@
                 </div>
                 <div class="modal-body">
                     <p><span class="glyphicon glyphicon-asterisk text-danger"></span> is not empty!</p>
-                    <form id="myForm" role="form">
+                    @using (Html.BeginForm("OnlineBooking", "Booking", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
                         <!--Personal Info-->
-                        <!--First name-->
-                        <div id="form1">
-                            <div class="form-group">
-                                <label for="firstName"><span class="glyphicon glyphicon-user"></span> First Name <span class="glyphicon glyphicon-asterisk text-danger"></span></label>
-                                <input type="text" class="form-control" id="firstName" placeholder="Enter first name" required/>
-                            </div>
+                        <div id="form1" class="form-group">
+                            <!--First name-->
+                            <label for="firstName"><span class="glyphicon glyphicon-user"></span> First Name <span class="glyphicon glyphicon-asterisk text-danger"></span></label>
+                            <input type="text" class="form-control" name="firstName" id="firstName" value="" placeholder="Enter first name" required />
                             <!--last name-->
-                            <div class="form-group">
-                                <label for="lastName"><span class="glyphicon glyphicon-user"></span> Last Name <span class="glyphicon glyphicon-asterisk text-danger"></span></label>
-                                <input type="text" class="form-control" id="lastName" placeholder="Enter Last name" required/>
-                            </div>
+                            <label for="lastName"><span class="glyphicon glyphicon-user"></span> Last Name <span class="glyphicon glyphicon-asterisk text-danger"></span></label>
+                            <input type="text" class="form-control" name="lastName" id="lastName" value="" placeholder="Enter Last name" required />
                             <!--Person Identity-->
-                            <div class="form-group">
-                                <label for="personIdentity"><span class="glyphicon glyphicon-user"></span> Person Identity <span class="glyphicon glyphicon-asterisk text-danger"></span></label>
-                                <input type="text" class="form-control" id="personIdentity" placeholder="Enter passport number, driver licence, etc..." required/>
-                            </div>
-                            <!--Contact number-->
-                            <div class="form-group">
-                                <label for="contactNumber"><span class="glyphicon glyphicon-earphone"></span> Contact number</label>
-                                <input type="tel" class="form-control" id="contactNumber" placeholder="Enter contact number" />
-                            </div>
-                            <!--Email-->
-                            <div class="form-group">
-                                <label for="email"><span class="glyphicon glyphicon-envelope"></span> Email</label>
-                                <input type="email" class="form-control" id="email" placeholder="Enter email" />
-                            </div>
-                            <!--Address-->
-                            <div class="form-group">
-                                <label for="address"><span class="glyphicon glyphicon-home"></span> Address</label>
-                                <input type="text" class="form-control" id="address" placeholder="Enter address" />
-                            </div>
-                            <!--City-->
-                            <div class="form-group">
-                                <label for="city"><span class="glyphicon glyphicon-home"></span> City</label>
-                                <input type="text" class="form-control" id="city" placeholder="Enter city name" />
-                            </div>
-                            <!--Country-->
-                            <div class="form-group">
-                                <label for="country"><span class="glyphicon glyphicon-home"></span> Country</label>
-                                <input type="text" class="form-control" id="country" placeholder="Enter country name" />
-                            </div>
+                            <label for="identity"><span class="glyphicon glyphicon-user"></span> Person Identity <span class="glyphicon glyphicon-asterisk text-danger"></span></label>
+                            <input type="text" class="form-control" name="identity" id="identity" value="" placeholder="Enter passport number, driver licence, etc..." required />
+                            <!--Check in-->
+                            <label for="checkin"><span class="glyphicon glyphicon-calendar"></span> Check-in <span class="glyphicon glyphicon-asterisk text-danger"></span></label>
+                            <input type="date" class="form-control" name="checkin" id="checkin" value="" placeholder="Select a date" required />
+                            <!--Check out-->
+                            <label for="checkout"><span class="glyphicon glyphicon-calendar"></span> Check-in <span class="glyphicon glyphicon-asterisk text-danger"></span></label>
+                            <input type="date" class="form-control" name="checkout" id="checkout" value="" placeholder="Select a date" required />
                         </div>
-                        
-                        <div id="form2">
-                            <div class="form-group">
-                                <input type="radio" name="organisation" value="Y" checked> Organisation
-                                <input type="radio" name="organisation" value="N"> Individual
-                            </div>
+
+                        <div id="form2" class="form-group">
+                            <input type="radio" name="cardType" value="C" checked> Credit
+                            <input type="radio" name="cardType" value="D"> Debit
+                            <hr />
+                            <!--Card number-->
+                            <label for="cardNumber"><span class="glyphicon glyphicon-credit-card"></span> Card Number <span class="glyphicon glyphicon-asterisk text-danger"></span></label>
+                            <input type="text" class="form-control" name="cardNumber" id="cardNumber" value="" placeholder="Enter your card number" maxlength="16" required />
+                            <!--Name holder-->
+                            <label for="nameHolder"><span class="glyphicon glyphicon-credit-card"></span> name holder <span class="glyphicon glyphicon-asterisk text-danger"></span></label>
+                            <input type="text" class="form-control" name="nameHolder" id="nameHolder" value="" placeholder="Enter your name on the card" required />
                         </div>
 
                         <button id="continue" class="btn btn-block">
@@ -155,7 +138,7 @@
                             Submit
                             <span class="glyphicon glyphicon-ok"></span>
                         </button>
-                    </form>
+                    }
                 </div>
                 <div class="modal-footer">
                     <button id="cancel" class="btn btn-default pull-right" data-dismiss="modal">
@@ -171,6 +154,7 @@
     </div>
 </div>
 
+<!--Contact-->
 <div id="contact" class="container">
     <h3 class="text-center">Contact</h3>
     
@@ -200,4 +184,5 @@
     </div>
     <br>
 </div>
+<!--Google map-->
 <div id="googleMap"></div>
