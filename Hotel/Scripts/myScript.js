@@ -1,4 +1,25 @@
 ﻿$(document).ready(function () {
+    // Display confirm div
+    var confirm = $("#confirm");
+    if (confirm.data("active")) { return; }
+    confirm.show().data("active", true);
+    setTimeout(function () {
+        confirm.hide().data("active", false);
+    }, 5000);
+
+    //Enable/disable booking button
+    if ($("#singleRoom").text() === "No Vacancy!") {
+        $("#single").attr("disabled", true);
+    } else $("#single").removeAttr("disabled");
+
+    if ($("#doubleRoom").text() === "No Vacancy!") {
+        $("#double").attr("disabled", true);
+    } else $("#double").removeAttr("disabled");
+
+    if ($("#superiorRoom").text() === "No Vacancy!") {
+        $("#superior").attr("disabled", true);
+    } else $("#superior").removeAttr("disabled");
+
     // Initialize Tooltip
     $('[data-toggle="tooltip"]').tooltip();
 
@@ -30,55 +51,37 @@
         interval: 3000 //speed
     });
 
-    // Click event: Booking room button
-    // Call up modal dialog
-    $("#single").click(function () {
-        showForm1();
-    });
-
-    $("#double").click(function () {
-        showForm1();
-    });
-
-    $("#superior").click(function () {
-        showForm1();
-    });
-
-    $("#continue").click(function () {
-        showForm2();
-    });
-
-    $("#goBack").click(function () {
-        showForm1();
-    });
-
     $("#submit").click(function () {
         var myForm = $("#myForm");
-        if (myForm[0].checkValidity()) {
+        if (myForm.checkValidity) {
             myForm.submit();
-        }else{
-            showForm1();
         }
     });
+
+    /*
+    $("#bookingForm").submit(function (e) {
+        var data = {
+            'firstName': $("#firstName").val(),
+            'lastName': $("#lastName").val(),
+            'identity': $("#identity").val(),
+            'checkin': $("#checkin").val(),
+            'checkout': $("#checkout").val(),
+            'cardType': $("#cardType").val(),
+            'cardNumber': $("#cardNumber").val(),
+            'nameHolder': $("#nameHolder").val()
+        };
+        e.preventDefault();
+        $.ajax({
+            url: myForm.attr('action'),
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            type: myForm.attr('method'),
+            data: data,//myForm.serialize(),
+            encode:true
+        })
+        .done(function (data) {
+            alert("Hi");
+        });
+    });
+    */
 })
-
-function showForm1() {
-    $("#form1").show();
-    $("#form2").hide();
-    $("#continue").show();
-    $("#submit").hide();
-    $("#goBack").hide();
-}
-
-function showForm2() {
-    $("#form1").hide();
-    $("#form2").show();
-    $("#continue").hide();
-    $("#submit").show();
-    $("#goBack").show();
-}
-
-function showFullForm() {
-    $("#form1").show();
-    $("#form2").show();
-}

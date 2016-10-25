@@ -1,7 +1,6 @@
 ﻿@{
     ViewBag.Title = "Home Page";
 }
-
 <!--About-->
 <div id="about" class="container text-center">
     <h3>ABOUT HOTEL</h3>
@@ -48,13 +47,14 @@
 <!--Booking-->
 <div id="booking" class="bg-1">
     <div class="container">
+        <div id="confirm" class="text-center"><h4>@ViewBag.Confirm</h4></div>
         <h3 class="text-center">Room Booking</h3>
         <p class="text-center">We have rooms.<br> You can book your room here!</p>
 
         <ul class="list-group">
-            <li class="list-group-item">Single Room <span class="label label-danger">No Vacancy!</span></li>
-            <li class="list-group-item">Double Room <span class="label label-danger">No Vacancy!</span></li>
-            <li class="list-group-item">Superior Room <span class="badge">3</span></li>
+            <li class="list-group-item">Single Room <span id="singleRoom" class="label label-danger">No Vacancy!</span></li>
+            <li class="list-group-item">Double Room <span id="doubleRoom" class="label label-danger">No Vacancy!</span></li>
+            <li class="list-group-item">Superior Room <span id="superiorRoom" class="label label-danger">Vacancy</span></li>
         </ul>
 
         <div class="row text-center">
@@ -95,12 +95,13 @@
                     <h4><span class="glyphicon glyphicon-briefcase"></span> Booking</h4>
                 </div>
                 <div class="modal-body">
-                    <p><span class="glyphicon glyphicon-asterisk text-danger"></span> is not empty!</p>
-                    @using (Html.BeginForm("OnlineBooking", "Booking", FormMethod.Post))
+                    @using (Html.BeginForm("OnlineBooking", "Booking", FormMethod.Post, new {@id="bookingForm"}))
                     {
                         @Html.AntiForgeryToken()
                         <!--Personal Info-->
-                        <div id="form1" class="form-group">
+                        <div id="info" class="form-group">
+                            <p><span class="glyphicon glyphicon-asterisk text-danger"></span> is not empty!</p>
+                            <br />
                             <!--First name-->
                             <label for="firstName"><span class="glyphicon glyphicon-user"></span> First Name <span class="glyphicon glyphicon-asterisk text-danger"></span></label>
                             <input type="text" class="form-control" name="firstName" id="firstName" value="" placeholder="Enter first name" required />
@@ -116,11 +117,11 @@
                             <!--Check out-->
                             <label for="checkout"><span class="glyphicon glyphicon-calendar"></span> Check-in <span class="glyphicon glyphicon-asterisk text-danger"></span></label>
                             <input type="date" class="form-control" name="checkout" id="checkout" value="" placeholder="Select a date" required />
-                        </div>
-
-                        <div id="form2" class="form-group">
-                            <input type="radio" name="cardType" value="C" checked> Credit
-                            <input type="radio" name="cardType" value="D"> Debit
+                            <!--Card Type-->
+                            <div class="row">
+                                <div class="col-md-3"><input type="radio" name="cardType" value="C" checked> Credit</div>
+                                <div class="col-md-3"><input type="radio" name="cardType" value="D"> Debit</div>
+                            </div>
                             <hr />
                             <!--Card number-->
                             <label for="cardNumber"><span class="glyphicon glyphicon-credit-card"></span> Card Number <span class="glyphicon glyphicon-asterisk text-danger"></span></label>
@@ -129,14 +130,8 @@
                             <label for="nameHolder"><span class="glyphicon glyphicon-credit-card"></span> name holder <span class="glyphicon glyphicon-asterisk text-danger"></span></label>
                             <input type="text" class="form-control" name="nameHolder" id="nameHolder" value="" placeholder="Enter your name on the card" required />
                         </div>
-
-                        <button id="continue" class="btn btn-block">
-                            Continue
-                            <span class="glyphicon glyphicon-circle-arrow-right"></span>
-                        </button>
                         <button id="submit" class="btn btn-block">
-                            Submit
-                            <span class="glyphicon glyphicon-ok"></span>
+                            Submit <span class="glyphicon glyphicon-ok"></span>
                         </button>
                     }
                 </div>
@@ -144,10 +139,6 @@
                     <button id="cancel" class="btn btn-default pull-right" data-dismiss="modal">
                         <span class="glyphicon glyphicon-remove"></span> Cancel
                     </button>
-                    <button id="goBack" class="btn btn-default pull-left">
-                        <span class="glyphicon glyphicon-arrow-left"></span> Back
-                    </button>
-                    <!--<p>Need <a href="#">help?</a></p>-->
                 </div>
             </div>
         </div>

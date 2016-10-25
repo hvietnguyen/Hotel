@@ -32,9 +32,14 @@ namespace Hotel.Controllers
                 string type = cardType;
                 string number = cardNumber;
                 string holder = nameHolder;
-                return RedirectToAction("Index", "Home");
+                TempData["Confirm"] = "Your booking is successful!!!";
             }
-            return View();
+            else
+            {
+                TempData["Confirm"] = "Your booking unsuccessfull!!!";
+            }
+            string url = "http://"+Request.Url.Authority+"/Home/Index/#booking";
+            return Redirect(url);
         }
     }
 }

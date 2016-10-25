@@ -10,6 +10,8 @@ namespace Hotel.Controllers
     {
         public ActionResult Index()
         {
+            ViewBag.Confirm = TempData["Confirm"] as string;
+            TempData["Confirm"] = "";
             return View();
         }
 
