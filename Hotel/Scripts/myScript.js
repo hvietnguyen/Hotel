@@ -51,6 +51,17 @@
         interval: 3000 //speed
     });
 
+    $("#single").click(function () {
+        $("#roomTypeID").attr("value", "1");
+    });
+
+    $("#double").click(function () {
+        $("#roomTypeID").attr("value", "2");
+    });
+    $("#superior").click(function () {
+        $("#roomTypeID").attr("value", "3");
+    });
+
     $("#submit").click(function () {
         var myForm = $("#myForm");
         if (myForm.checkValidity) {
