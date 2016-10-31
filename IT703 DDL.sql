@@ -54,6 +54,10 @@ values('1.01',1,1),('1.02',2,1),
 
 update Room set status=1 where status =3
 Select * from Room
+Select COUNT(*) from Room Where status in (1,2)
+Group By status
+
+
 -- Table Customer
 
 CREATE TABLE [Customer]
@@ -99,6 +103,7 @@ go
 
 ALTER TABLE [BookingDetail] ADD CONSTRAINT [BookingDetail_PK] PRIMARY KEY ([BookingDetailID])
 go
+
 
 Select * from BookingDetail
 where CustomerID=9 and date=cast('2016-10-27' as date)
@@ -216,6 +221,7 @@ go
 ALTER TABLE [Invoice] ADD CONSTRAINT [Invoice_PK] PRIMARY KEY ([InvoiceID])
 go
 
+Select * From Invoice
 -- Table RoomService
 
 CREATE TABLE [RoomService]

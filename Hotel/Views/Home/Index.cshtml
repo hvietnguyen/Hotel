@@ -1,5 +1,33 @@
 ﻿@{
     ViewBag.Title = "Home Page";
+    string singleRoom="", doubleRoom="", superiorRoom="", status="";
+    status = ViewBag.Status;
+    if (status.Split('.')[0] == "0")
+    {
+        singleRoom = "No Vacancy!";
+    }
+    else
+    {
+        singleRoom = "Vacancy";
+    }
+
+    if (status.Split('.')[1] == "0")
+    {
+        doubleRoom = "No Vacancy!";
+    }
+    else
+    {
+        doubleRoom = "Vacancy";
+    }
+
+    if (status.Split('.')[2] == "0")
+    {
+        superiorRoom = "No Vacancy!";
+    }
+    else
+    {
+        superiorRoom = "Vacancy";
+    }
 }
 <!--About-->
 <div id="about" class="container text-center">
@@ -52,9 +80,9 @@
         <p class="text-center">We have rooms.<br> You can book your room here!</p>
 
         <ul class="list-group">
-            <li class="list-group-item">Single Room <span id="singleRoom" class="label label-danger">No Vacancy!</span></li>
-            <li class="list-group-item">Double Room <span id="doubleRoom" class="label label-danger">No Vacancy!</span></li>
-            <li class="list-group-item">Superior Room <span id="superiorRoom" class="label label-danger">Vacancy</span></li>
+            <li class="list-group-item">Single Room <span id="singleRoom" class="label label-danger">@singleRoom</span></li>
+            <li class="list-group-item">Double Room <span id="doubleRoom" class="label label-danger">@doubleRoom</span></li>
+            <li class="list-group-item">Superior Room <span id="superiorRoom" class="label label-danger">@superiorRoom</span></li>
         </ul>
 
         <div class="row text-center">

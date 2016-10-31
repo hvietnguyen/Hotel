@@ -120,6 +120,8 @@ namespace Hotel.Controllers
                                 cmd.ExecuteNonQuery();
                                 TempData["Confirm"] = "Your booking is successful!";
                             }
+
+
                         }
                         else
                         {
