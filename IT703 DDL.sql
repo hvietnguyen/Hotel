@@ -178,13 +178,13 @@ ALTER TABLE [Organisation] ADD CONSTRAINT [Organisation_PK] PRIMARY KEY ([Organi
 go
 
 -- Table Employee
-
+drop table Employee
 CREATE TABLE [Employee]
 (
  [EmployeeID] Int IDENTITY(1,1) NOT NULL,
  [firstName] Varchar(50) NOT NULL,
  [lastName] Varchar(50) NOT NULL,
- [RoleID] Int NOT NULL
+ [AccountID] Int NULL
 )
 go
 -- Add keys for table Employee
@@ -192,19 +192,29 @@ go
 ALTER TABLE [Employee] ADD CONSTRAINT [Employee_PK] PRIMARY KEY ([EmployeeID])
 go
 
--- Table Role
+Insert Into Employee(firstName,lastName,AccountID)
+Values('Viet','Nguyen',1)
 
-CREATE TABLE [Role]
+Select * From Employee
+
+-- Table Account
+CREATE TABLE [Account]
 (
- [RoleID] Int IDENTITY(1,1) NOT NULL,
- [roleName] Varchar(50) NOT NULL
+ [AccountID] Int IDENTITY(1,1) NOT NULL,
+ [roleName] Varchar(50) NOT NULL,
+ [account] Varchar(50) NOT NULL,
+ [pass] Varchar(8) NOT NULL
 )
 go
 
 -- Add keys for table Role
-
-ALTER TABLE [Role] ADD CONSTRAINT [Role_PK] PRIMARY KEY ([RoleID])
+ALTER TABLE [Account] ADD CONSTRAINT [Account_PK] PRIMARY KEY ([AccountID])
 go
+
+Insert Into Account(account,roleName,pass)
+Values('hviet','Manager','123456')
+
+Select e.EmployeeID, e.firstName, e.lastName, a.roleName from Account a, Employee e
 
 -- Table Invoice
 

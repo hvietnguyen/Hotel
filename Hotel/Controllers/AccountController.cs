@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Hotel.Models;
+using System.Data.SqlClient;
 
 namespace Hotel.Controllers
 {
@@ -66,16 +67,56 @@ namespace Hotel.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
+        public ActionResult Login(string acc, string pass)//async Task<ActionResult> Login(string acc, string pass)
         {
-            if (!ModelState.IsValid)
+            TempData["Role"] = "";
+            SqlConnection conn = null;
+            string connectionString = "Server=PC-BIT-1444; Database=Hotel; Integrated Security=SSPI";
+            if (ModelState.IsValid)
             {
-                return View(model);
+                using (conn = new SqlConnection(connectionString))
+                {
+                    try
+                    {
+                        conn.Open();
+                        string cmdString = "Select e.EmployeeID, e.firstName, e.lastName, a.roleName from Account a, Employee e Where a.account='" + acc+"' and a.pass='"+pass+"'";
+                        SqlCommand cmd = new SqlCommand(cmdString, conn);
+                        SqlDataReader rd = cmd.ExecuteReader();
+                        if (rd.HasRows)
+                        {
+                            rd.Read();
+                            TempData["Role"] = rd[3].ToString();
+                            TempData["UserID"] = rd[0].ToString();
+                            TempData["FullName"] = rd[1].ToString() + " " + rd[2].ToString();
+                            string url = "http://" + Request.Url.Authority + "/Home/Index";
+                            return Redirect(url);
+                        }
+                        else
+                        {
+                            ViewBag.Confirm = "Username or password are incorrect!";
+                            return View();
+                        }
+                        rd.Close();
+                        conn.Close();
+                    }
+                    catch(Exception e)
+                    {
+                        conn.Close();
+                        ViewBag.Confirm = "Please try again!!! "+e.Message.ToString();
+                        return View();
+                    }
+                }
+                //return View();
+            }
+            else
+            {
+                ViewBag.Confirm = "Please try again!";
+                return View();
             }
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            /*var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -88,7 +129,7 @@ namespace Hotel.Controllers
                 default:
                     ModelState.AddModelError("", "Invalid login attempt.");
                     return View(model);
-            }
+            }*/
         }
 
         //
