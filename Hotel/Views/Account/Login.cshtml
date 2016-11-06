@@ -4,7 +4,7 @@
     ViewBag.Title = "Log in";
 }
 <h2 class="text-center">@ViewBag.Title.</h2>
-<div class="row">
+<div id="login" class="row">
     <div>
         <section id="loginForm">
             @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
@@ -15,6 +15,15 @@
                 @*
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 *@
+                <div class="form-group">
+                    @{
+                        if (ViewBag.Confirm != null)
+                        {
+                            <p class="text-danger"><span class="glyphicon glyphicon-exclamation-sign text-danger"></span> @ViewBag.Confirm</p>
+                        }
+                    }
+                    
+                </div>
                 <div class="form-group">
                     <label for="acc"><span class="glyphicon glyphicon-user"></span> Account Name</label>
                     <input type="text" class="form-control" name="acc" id="acc" value="" placeholder="Enter your account" required />

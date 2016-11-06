@@ -59,6 +59,7 @@ namespace Hotel.Controllers
         public ActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
+            //ViewBag.Login = 1;
             return View();
         }
 
@@ -69,7 +70,9 @@ namespace Hotel.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Login(string acc, string pass)//async Task<ActionResult> Login(string acc, string pass)
         {
-            TempData["Role"] = "";
+            TempData["Role"] = null;
+            TempData["UserID"] = null;
+            TempData["FullName"] = null;
             SqlConnection conn = null;
             string connectionString = "Server=PC-BIT-1444; Database=Hotel; Integrated Security=SSPI";
             if (ModelState.IsValid)
@@ -88,7 +91,7 @@ namespace Hotel.Controllers
                             TempData["Role"] = rd[3].ToString();
                             TempData["UserID"] = rd[0].ToString();
                             TempData["FullName"] = rd[1].ToString() + " " + rd[2].ToString();
-                            string url = "http://" + Request.Url.Authority + "/Home/Index";
+                            string url = "http://" + Request.Url.Authority + "/Home/Admin";
                             return Redirect(url);
                         }
                         else
@@ -427,14 +430,28 @@ namespace Hotel.Controllers
         }
 
         //
+        // GET: /Account/LogOff
+        [AllowAnonymous]
+        public ActionResult LogOff()
+        {
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            TempData["Role"] = null;
+            TempData["UserID"] = null;
+            TempData["FullName"] = null;
+            return RedirectToAction("Index", "Home");
+        }
+        //
         // POST: /Account/LogOff
-        [HttpPost]
+        /*[HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            TempData["Role"] = null;
+            TempData["UserID"] = null;
+            TempData["FullName"] = null;
             return RedirectToAction("Index", "Home");
-        }
+        }*/
 
         //
         // GET: /Account/ExternalLoginFailure

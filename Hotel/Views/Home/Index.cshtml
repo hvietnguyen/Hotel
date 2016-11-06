@@ -2,6 +2,9 @@
     ViewBag.Title = "Home Page";
     string singleRoom="", doubleRoom="", superiorRoom="", status="";
     status = ViewBag.Status;
+    int single = status.Split('.')[0].AsInt();
+    int doub = status.Split('.')[1].AsInt();
+    int sup = status.Split('.')[2].AsInt();
     if (status.Split('.')[0] == "0")
     {
         singleRoom = "No Vacancy!";
@@ -29,6 +32,11 @@
         superiorRoom = "Vacancy";
     }
 }
+<script>
+    var singleNo = "@single";
+    var doubleNo = "@doub";
+    var superiorNo = "@sup";
+</script>
 <!--About-->
 <div id="about" class="container text-center">
     <h3>ABOUT HOTEL</h3>
@@ -140,28 +148,46 @@
                             <!--Person Identity-->
                             <label for="identity"><span class="glyphicon glyphicon-user"></span> Person Identity <span class="glyphicon glyphicon-asterisk text-danger"></span></label>
                             <input type="text" class="form-control" name="identity" id="identity" value="" placeholder="Enter passport number, driver licence, etc..." required />
+                            <!--Number of room-->
+                            <label for="rooms"><span class="glyphicon glyphicon-list"></span> Number of Rooms <span class="glyphicon glyphicon-asterisk text-danger"></span></label>
+                            <select class="form-control" name="rooms" id="rooms"></select>
                             <!--Check in-->
                             <label for="checkin"><span class="glyphicon glyphicon-calendar"></span> Check-in <span class="glyphicon glyphicon-asterisk text-danger"></span></label>
                             <input type="date" class="form-control" name="checkin" id="checkin" value="" placeholder="Select a date" required />
                             <!--Check out-->
                             <label for="checkout"><span class="glyphicon glyphicon-calendar"></span> Check-in <span class="glyphicon glyphicon-asterisk text-danger"></span></label>
                             <input type="date" class="form-control" name="checkout" id="checkout" value="" placeholder="Select a date" required />
-                            <!--Card Type-->
-                            <div class="row">
-                                <div class="col-md-3"><input type="radio" name="cardType" value="C" checked> Credit</div>
-                                <div class="col-md-3"><input type="radio" name="cardType" value="D"> Debit</div>
-                            </div>
+                            
                             <hr />
                             <!--Card number-->
-                            <label for="cardNumber"><span class="glyphicon glyphicon-credit-card"></span> Card Number <span class="glyphicon glyphicon-asterisk text-danger"></span></label>
-                            <input type="text" class="form-control" name="cardNumber" id="cardNumber" value="" placeholder="Enter your card number" maxlength="16" required />
+                            <div>
+                                <label for="cardNumber"><span class="glyphicon glyphicon-credit-card"></span> Card Number <span class="glyphicon glyphicon-asterisk text-danger"></span></label>
+                                <input type="text" class="form-control" name="cardNumber" id="cardNumber" value="" placeholder="Enter your card number" maxlength="16" required />
+                            </div>
                             <!--Name holder-->
-                            <label for="nameHolder"><span class="glyphicon glyphicon-credit-card"></span> name holder <span class="glyphicon glyphicon-asterisk text-danger"></span></label>
-                            <input type="text" class="form-control" name="nameHolder" id="nameHolder" value="" placeholder="Enter your name on the card" required />
+                            <div>
+                                <label for="nameHolder"><span class="glyphicon glyphicon-credit-card"></span> name holder <span class="glyphicon glyphicon-asterisk text-danger"></span></label>
+                                <input type="text" class="form-control" name="nameHolder" id="nameHolder" value="" placeholder="Enter your name on the card" required />
+                            </div>
+                            <div>
+                                <div>
+                                    <label for="date"><span class="glyphicon glyphicon-calendar"></span> Date <span class="glyphicon glyphicon-asterisk text-danger"></span></label>
+                                </div>
+                                <input type="text" class="narrow-font" name="month" id="month" value="" placeholder="Month" size="2" required maxlength="2" /> /
+                                <input type="text" class="narrow-font" name="year" id="year" value="" placeholder="Year" size="4" required maxlength="4" />  
+                            </div>
+                            <div>
+                                <div>
+                                    <label for="code"><span class="glyphicon glyphicon-barcode"></span> Security code <span class="glyphicon glyphicon-asterisk text-danger"></span></label>
+                                </div>
+                                <input type="text" class="narrow-font" name="code" id="code" value="" placeholder="code" size="3" required maxlength="3" />
+                            </div>
                         </div>
-                        <button id="submit" class="btn btn-block">
-                            Submit <span class="glyphicon glyphicon-ok"></span>
-                        </button>
+                        <div>
+                            <button id="submit" class="btn btn-block">
+                                Submit <span class="glyphicon glyphicon-ok"></span>
+                            </button>
+                        </div>
                     }
                 </div>
                 <div class="modal-footer">

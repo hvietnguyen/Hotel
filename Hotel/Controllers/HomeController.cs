@@ -34,6 +34,10 @@ namespace Hotel.Controllers
             return View();
         }
 
+        public ActionResult Admin()
+        {
+            return View();
+        }
         string GetRoomStatus(int roomTypeID)
         {
             string status = "0";

@@ -2,28 +2,32 @@
     @using Microsoft.AspNet.Identity
 *@
 @{ 
-    var role = TempData["Role"] as string;
+    var role = TempData["Role"];
+    TempData.Keep("Role");
     var fullName = TempData["FullName"] as string;
-    var userid = TempData["UserID"] as string;
+    TempData.Keep("FullName");
+    var userid = TempData["UserID"];
+    TempData.Keep("UserID");
 }
-@if (role!="")
-{
-    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
-    {
-    @Html.AntiForgeryToken()
-
-    <ul class="nav navbar-nav navbar-right">
-        <li>
-            @Html.ActionLink("Hello " + fullName + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
-        </li>
-        <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
-    </ul>
-    }
-}
-else
+@if (role == null)
 {
     <ul class="nav navbar-nav navbar-right">
         @*<li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>*@
         <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
     </ul>
+}
+else
+{
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                @Html.ActionLink("Hello " + fullName + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+            </li>
+            <!--<li><a href="javascript:document.getElementById('logoutForm').submit()"> Log off</a></li>-->
+            <li>@Html.ActionLink("Log off", "LogOff", "Account")</li>
+        </ul>
+    }
 }

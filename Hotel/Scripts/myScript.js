@@ -53,13 +53,38 @@
 
     $("#single").click(function () {
         $("#roomTypeID").attr("value", "1");
+        $("#rooms").find("option").remove().end();
+        for (var i = 1; i <= singleNo; i++) {
+            if (i == 1) {
+                $("#rooms").append(new Option(i, i, true, true));
+            } else {
+                $("#rooms").append(new Option(i, i, false, false));
+            }
+        }
+        
     });
 
     $("#double").click(function () {
         $("#roomTypeID").attr("value", "2");
+        $("#rooms").find("option").remove().end();
+        for (var i = 1; i <= doubleNo; i++) {
+            if (i == 1) {
+                $("#rooms").append(new Option(i, i, true, true));
+            } else {
+                $("#rooms").append(new Option(i, i, false, false));
+            }
+        }
     });
     $("#superior").click(function () {
         $("#roomTypeID").attr("value", "3");
+        $("#rooms").find("option").remove().end();
+        for (var i = 1; i <= superiorNo; i++) {
+            if (i == 1) {
+                $("#rooms").append(new Option(i, i, true, true));
+            } else {
+                $("#rooms").append(new Option(i, i, false, false));
+            }
+        }
     });
 
     $("#submit").click(function () {

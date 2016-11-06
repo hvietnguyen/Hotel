@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title -Tomive Hotel</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 
@@ -17,15 +17,25 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Logo", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Tomive", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse" id="myNavbar">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li><a href="#about">About</a></li>
-                    <li>@Html.ActionLink("Room", "Index", "Room")</li>
-                    <li><a href="#booking">Book</a></li>
-                    <li><a href="#contact">Contact</a></li>
+                    @{
+                        if (ViewBag.Login == null)
+                        {
+                            <li><a href="#about">About</a></li>
+                            @*<li>@Html.ActionLink("Room", "Index", "Room")</li>*@
+                            <li><a href="#booking">Booking</a></li>
+                            <li><a href="#contact">Contact</a></li>
+                        }
+                        else
+                        {
+                            ViewBag.Login = null;
+                        }
+                    }
+                    
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
@@ -106,7 +116,7 @@
             <span class="glyphicon glyphicon-chevron-up"></span>
         </a>
         <br /><br />
-        <p>&copy; @DateTime.Now.Year - Hotel</p>
+        <p>&copy; @DateTime.Now.Year - Tomive Hotel</p>
     </footer>
 
     @Scripts.Render("~/bundles/jquery")

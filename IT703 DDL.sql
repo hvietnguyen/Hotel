@@ -47,10 +47,12 @@ ALTER TABLE [Room] ADD CONSTRAINT [Room_PK] PRIMARY KEY ([RoomID])
 go
 --Insert Room
 --1:vacant clean, 2:vacant dirty, 3:occupied clean, 4:occupied service, 5:maintenance
+delete from Room
 Insert into Room(roomNumber,[status],RoomTypeID)
 values('1.01',1,1),('1.02',2,1),
 	('2.01',1,2),('2.02',2,2),
 	('3.01',1,3),('3.02',2,3)
+Select r.RoomID,r.roomNumber,r.status,t.type from Room r, RoomType t where r.RoomTypeID=t.RoomTypeID
 
 update Room set status=1 where status =3
 Select * from Room
@@ -84,10 +86,11 @@ ALTER TABLE [Customer] ADD CONSTRAINT [Customer_PK] PRIMARY KEY ([CustomerID])
 go
 
 -- Table BookingDetail
-
+Drop Table BookingDetail
 CREATE TABLE [BookingDetail]
 (
  [BookingDetailID] Int IDENTITY(1,1) NOT NULL,
+ [bookingReference] Varchar(50) NULL,
  [bookingMethod] Varchar(20) NOT NULL,
  [date] Date NOT NULL,
  [deposit] Numeric(6,2) NULL,
@@ -104,11 +107,11 @@ go
 ALTER TABLE [BookingDetail] ADD CONSTRAINT [BookingDetail_PK] PRIMARY KEY ([BookingDetailID])
 go
 
-
+Delete from BookingDetail
 Select * from BookingDetail
 where CustomerID=9 and date=cast('2016-10-27' as date)
 
-Delete from BookingDetail
+
 
 -- Table CarPark
 
@@ -124,7 +127,7 @@ ALTER TABLE [CarPark] ADD CONSTRAINT [CarPark_PK] PRIMARY KEY ([CarParkID])
 go
 
 -- Table CardDetail
-
+Drop table CardDetail
 CREATE TABLE [CardDetail]
 (
  [CardDetailID] Int IDENTITY(1,1) NOT NULL,
@@ -136,10 +139,10 @@ CREATE TABLE [CardDetail]
 )
 go
 -- Add keys for table CardDetail
-
 ALTER TABLE [CardDetail] ADD CONSTRAINT [CardDetail_PK] PRIMARY KEY ([CardDetailID])
 go
 
+Delete From CardDetail
 Select * from CardDetail
 
 -- Table Note
