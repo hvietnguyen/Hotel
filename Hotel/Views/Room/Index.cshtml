@@ -3,14 +3,21 @@
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_layoutAdmin.cshtml";
+    var role = TempData["Role"];
+    TempData.Keep("Role");
 }
 
 <div class="modal-body">
     <h2>Index</h2>
-
-    <p>
-        @Html.ActionLink("Create New", "Create")
-    </p>
+    @{
+        if (role != null && role.ToString() == "Manager")
+        {
+            <p>
+                <button class="btn" id="single" data-toggle="modal" data-target="#NewRoom"><span class="glyphicon glyphicon-plus"></span> New Room</button>
+            </p>
+        }
+    }
+    
     <div id="Rooms">
         <table class="table table-striped">
             <tr>
@@ -39,10 +46,61 @@
                         @Html.DisplayFor(modelItem => item.RoomType)
                     </td>
                     <td>
-                        @Html.ActionLink("Edit", "Edit", new { id = item.RoomID })
+                        @Html.ActionLink("Details", "Details", "Room", new { id = item.RoomID }, null) |
+                        @{
+                            if (role != null && role.ToString() == "Manager")
+                            {
+                                @Html.ActionLink("Remove", "Delete", "Room", new { id = item.RoomID }, null)
+                            }
+                        } 
                     </td>
                 </tr>
             }
         </table>
+    </div>
+</div>
+<div id="New">
+    <!-- Modal -->
+    <div class="modal fade" id="NewRoom" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove-circle"></span></button>
+                    <h4><span class="glyphicon glyphicon-briefcase"></span> New Employee</h4>
+                </div>
+                <div class="modal-body">
+                    @using (Html.BeginForm("NewRoom", "Room", FormMethod.Post, new { @id = "NewRoomForm" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div id="info" class="form-group">
+                            <p class="text-danger"><span class="glyphicon glyphicon-asterisk text-danger"></span> is not empty!</p>
+                            <br />
+                            <!--First name-->
+                            <label for="roomNumber">Room Number <span class="glyphicon glyphicon-asterisk text-danger"></span></label>
+                            <input type="text" class="form-control" name="roomNumber" id="roomNumber" value="" placeholder="Enter room number" required />
+                            <!--last name-->
+                            <label for="type">Room Type <span class="glyphicon glyphicon-asterisk text-danger"></span></label>
+                            <select class="form-control" name="type" id="type">
+                                <option value="">Select Room Type</option>
+                                <option value="1">Single Room</option>
+                                <option value="2">Double Room</option>
+                                <option value="3">Superior Room</option>
+                            </select>
+                        </div>
+                        <div>
+                            <button id="submit" class="btn btn-block">
+                                Submit <span class="glyphicon glyphicon-ok"></span>
+                            </button>
+                        </div>
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button id="cancel" class="btn btn-default pull-right" data-dismiss="modal">
+                        <span class="glyphicon glyphicon-remove"></span> Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

@@ -1,0 +1,137 @@
+﻿@model IEnumerable<Hotel.Models.Employee>
+
+@{
+    ViewBag.Title = "Employees";
+    Layout = "~/Views/Shared/_layoutAdmin.cshtml";
+    var empid = TempData["UserID"] as string;
+    TempData.Keep("UserID");
+}
+<div class="modal-body">
+    <h2>View</h2>
+
+    <p>
+        <button class="btn" id="single" data-toggle="modal" data-target="#CreateEmployee"><span class="glyphicon glyphicon-plus"></span> New Employee</button>
+    </p>
+    <div id="Employees">
+        <table class="table table-striped">
+            <tr>
+                <th>
+                    First Name
+                </th>
+                <th>
+                    Last Name
+                </th>
+                <th>
+                    Identity
+                </th>
+                <th>
+                    Contact
+                </th>
+                <th>
+                    Address
+                </th>
+                <th>
+                    Account
+                </th>
+                <th>
+                    Role
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Identity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Contact)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Address)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Account)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Role)
+                    </td>
+                    <td>
+                        @{
+                            if (item.EmployeeID.ToString() != empid)
+                            {
+                                @Html.ActionLink("Remove", "Delete", "Employee", new { id = item.EmployeeID }, null)
+                            }
+                        }
+                        
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+</div>
+<div id="Create">
+    <!-- Modal -->
+    <div class="modal fade" id="CreateEmployee" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove-circle"></span></button>
+                    <h4><span class="glyphicon glyphicon-briefcase"></span> New Employee</h4>
+                </div>
+                <div class="modal-body">
+                    @using (Html.BeginForm("Create", "Employee", FormMethod.Post, new { @id = "NewEmployeeForm" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div id="info" class="form-group">
+                            <p class="text-danger"><span class="glyphicon glyphicon-asterisk text-danger"></span> is not empty!</p>
+                            <br />
+                            <!--First name-->
+                            <label for="firstName"><span class="glyphicon glyphicon-user"></span> First Name <span class="glyphicon glyphicon-asterisk text-danger"></span></label>
+                            <input type="text" class="form-control" name="firstName" id="firstName" value="" placeholder="Enter first name" required />
+                            <!--last name-->
+                            <label for="lastName"><span class="glyphicon glyphicon-user"></span> Last Name <span class="glyphicon glyphicon-asterisk text-danger"></span></label>
+                            <input type="text" class="form-control" name="lastName" id="lastName" value="" placeholder="Enter Last name" required />
+
+                            <label for="identity"><span class="glyphicon glyphicon-barcode"></span> Identity <span class="glyphicon glyphicon-asterisk text-danger"></span></label>
+                            <input type="text" class="form-control" name="identity" id="identity" value="" placeholder="Enter Identity" required />
+
+                            <label for="contact"><span class="glyphicon glyphicon-phone"></span> Contact <span class="glyphicon glyphicon-asterisk text-danger"></span></label>
+                            <input type="text" class="form-control" name="contact" id="contact" value="" placeholder="Enter contact" required maxlength="12" />
+
+                            <label for="address"><span class="glyphicon glyphicon-home"></span> Address <span class="glyphicon glyphicon-asterisk text-danger"></span></label>
+                            <input type="text" class="form-control" name="address" id="address" value="" placeholder="Enter address" required />
+                            
+                            <label for="role"><span class="glyphicon glyphicon-list"></span> Role <span class="glyphicon glyphicon-asterisk text-danger"></span></label>
+                            <select class="form-control" name="role" id="role">
+                                <option value="">Select role</option>
+                                <option value="Manager">Manager</option>
+                                <option value="Receptionist">Receptionist</option>
+                                <option value="RoomKeeper">Room Keeper</option>
+                            </select>
+                        </div>
+                        <div>
+                            <button id="submit" class="btn btn-block">
+                                Submit <span class="glyphicon glyphicon-ok"></span>
+                            </button>
+                        </div>
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button id="cancel" class="btn btn-default pull-right" data-dismiss="modal">
+                        <span class="glyphicon glyphicon-remove"></span> Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

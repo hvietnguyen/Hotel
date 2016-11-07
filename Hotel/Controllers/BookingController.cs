@@ -16,7 +16,60 @@ namespace Hotel.Controllers
         // GET: Booking
         public ActionResult Index()
         {
-            return View();
+            var accid = TempData["UserID"];
+            TempData.Keep("UserID");
+            var role = TempData["Role"];
+            TempData.Keep("Role");
+            if (accid != null && (role.ToString()=="Receptionist" || role.ToString() == "Manager"))
+            {
+                List<Booking> bookings = new List<Booking>();
+                using (conn = new SqlConnection(connectionString))
+                {
+                    SqlDataReader rd = null;
+                    try
+                    {
+                        conn.Open();
+                        string cmdString = "Select b.*,c.*,r.*,t.type,t.price,t.occupants from BookingDetail b, Customer c, Room r, RoomType t where b.CustomerID=c.CustomerID and b.RoomID=r.RoomID and r.RoomTypeID=t.RoomTypeID";
+                        SqlCommand cmd = new SqlCommand(cmdString, conn);
+                        rd = cmd.ExecuteReader();
+                        while (rd.Read())
+                        {
+                            Booking booking = new Booking
+                            {
+                                BookingID = Convert.ToInt32(rd["BookingDetailID"].ToString()),
+                                BookingReference = rd["bookingReference"].ToString(),
+                                BookingMethod = rd["bookingMethod"].ToString(),
+                                Date = Convert.ToDateTime(rd["date"].ToString()),
+                                Deposit = Convert.ToDecimal(rd["deposit"].ToString()),
+                                Checkin = Convert.ToDateTime(rd["checkin"].ToString()),
+                                Checkout = Convert.ToDateTime(rd["checkout"].ToString()),
+                                CustomerID = Convert.ToInt32(rd["CustomerID"].ToString()),
+                                FirstName = rd["firstName"].ToString(),
+                                LastName = rd["lastName"].ToString(),
+                                Identity = rd["personIdentity"].ToString(),
+                                RoomID = Convert.ToInt32(rd["RoomID"].ToString()),
+                                RoomNumber = rd["roomNumber"].ToString(),
+                                RoomType = rd["type"].ToString(),
+                                Price = Convert.ToDecimal(rd["price"].ToString())
+                            };
+                            bookings.Add(booking);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        ViewBag.Error = e.Message;
+                    }
+                    rd.Close();
+                    conn.Close();
+                }
+
+                return View(bookings);
+            }
+            else
+            {
+                string url = "http://" + Request.Url.Authority + "/Account/Login";
+                return Redirect(url);
+            }
         }
 
         //
@@ -28,19 +81,27 @@ namespace Hotel.Controllers
             string url = "http://" + Request.Url.Authority + "/Home/Index/#booking";
             if (ModelState.IsValid)
             {
+                DateTime today = DateTime.Today;
+                Random rand = new Random();
+                string reference = firstName[0] + lastName + "-" + today.Day + today.Month + today.Year + "-" + rand.Next(1000, 10000);
+                decimal total = 0;
+                bool isBooked = false;
                 using (conn = new SqlConnection(connectionString))
                 {
                     try
                     {
                         conn.Open();
-                        for(int i=0; i < rooms; i++)
+                        string cmdString="";
+                        SqlCommand cmd = null;
+                        SqlDataReader rd = null;
+                        for (int i=0; i < rooms; i++)
                         {
                             // Retrieve room id
                             int roomId = 0;
                             int status = 0;
-                            string cmdString = "Select * from Room where RoomTypeID=" + roomTypeID + " and (status=1 or status=2)";
-                            SqlCommand cmd = new SqlCommand(cmdString, conn);
-                            SqlDataReader rd = cmd.ExecuteReader();
+                            cmdString = "Select * from Room where RoomTypeID=" + roomTypeID + " and (status=1 or status=2)";
+                            cmd = new SqlCommand(cmdString, conn);
+                            rd = cmd.ExecuteReader();
                             if (rd.HasRows)
                             {
                                 rd.Read();
@@ -89,16 +150,14 @@ namespace Hotel.Controllers
                                 }
                                 rd.Close();
 
-                                DateTime today = DateTime.Today;
                                 if (cusId > 0)
                                 {
-                                    Random rand = new Random();
-                                    string reference = firstName[0]+lastName+"-"+today.Day+today.Month+today.Year+"-"+rand.Next(1000,10000);
                                     cmdString = "Select price from RoomType where RoomTypeID="+roomTypeID;
                                     cmd = new SqlCommand(cmdString, conn);
                                     rd = cmd.ExecuteReader();
                                     decimal price = 0;
                                     if (rd.Read()) price = Convert.ToDecimal(rd[0].ToString());
+                                    total += price;
                                     decimal deposit = price/100*10;
                                     rd.Close();
                                     // Insert into Booking Detail
@@ -120,7 +179,7 @@ namespace Hotel.Controllers
                                 int bookId = 0;
                                 string todayFormat = today.ToShortDateString();
                                 todayFormat = Regex.Split(todayFormat, "/")[2] + "-" + Regex.Split(todayFormat, "/")[1] + "-" + Regex.Split(todayFormat, "/")[0];
-                                cmdString = "Select BookingDetailID From BookingDetail ";
+                                cmdString = "Select MAX(BookingDetailID) From BookingDetail ";
                                 cmdString += "Where CustomerID=" + cusId + " and date=cast('" + todayFormat + "' as date)";
                                 cmd = new SqlCommand(cmdString, conn);
                                 rd = cmd.ExecuteReader();
@@ -131,26 +190,59 @@ namespace Hotel.Controllers
 
                                 if (bookId > 0)
                                 {
-                                    //Insert card detail
-                                    cmdString = "Insert Into CardDetail(cardType,cardNumber,nameHolder,BookingDetailID) ";
-                                    cmdString += "Values(@cardType,@cardNumber,@nameHolder,@BookingDetailID)";
+                                    int cardid = 0;
+                                    cmdString = "Select * from CardDetail where cardNumber='"+cardNumber+"'";
                                     cmd = new SqlCommand(cmdString, conn);
-                                    cmd.Parameters.Add(new SqlParameter("@cardType", "Credit"));
-                                    cmd.Parameters.Add(new SqlParameter("@cardNumber", cardNumber));
-                                    cmd.Parameters.Add(new SqlParameter("@nameHolder", nameHolder));
-                                    cmd.Parameters.Add(new SqlParameter("@BookingDetailID", bookId));
-                                    cmd.ExecuteNonQuery();
-                                    TempData["Confirm"] = "Your booking is successful!";
+                                    rd = cmd.ExecuteReader();
+                                    if (!rd.HasRows)
+                                    {
+                                        rd.Close();
+                                        //Insert card detail
+                                        cmdString = "Insert Into CardDetail(cardType,cardNumber,nameHolder) ";
+                                        cmdString += "Values(@cardType,@cardNumber,@nameHolder)";
+                                        cmd = new SqlCommand(cmdString, conn);
+                                        cmd.Parameters.Add(new SqlParameter("@cardType", "Credit"));
+                                        cmd.Parameters.Add(new SqlParameter("@cardNumber", cardNumber));
+                                        cmd.Parameters.Add(new SqlParameter("@nameHolder", nameHolder));
+                                        cmd.ExecuteNonQuery();
+                                        // Retrieve new cardid
+                                        cmdString = "Select * from CardDetail where cardNumber='" + cardNumber + "'";
+                                        cmd = new SqlCommand(cmdString, conn);
+                                        rd = cmd.ExecuteReader();
+                                        while (rd.Read()) cardid = Convert.ToInt32(rd["CardDetailID"].ToString());
+                                        rd.Close();
+                                        //Update booking
+                                        cmdString = "Update BookingDetail Set CardDetailID=" + cardid + " Where BookingDetailID=" + bookId;
+                                        cmd = new SqlCommand(cmdString, conn);
+                                        cmd.ExecuteNonQuery();
+                                    }
+                                    else
+                                    {
+                                        while(rd.Read()) cardid = Convert.ToInt32(rd["CardDetailID"].ToString());
+                                        rd.Close();
+                                        cmdString = "Update BookingDetail Set CardDetailID=" + cardid + " Where BookingDetailID=" + bookId;
+                                        cmd = new SqlCommand(cmdString, conn);
+                                        cmd.ExecuteNonQuery();
+                                    }
                                 }
-
-
+                                TempData["Confirm"] = "Your booking is successful!";
+                                isBooked = true;
                             }
                             else
                             {
                                 TempData["Confirm"] = "No vacancy room!!!";
                             }
                         }
-                        
+                        if (isBooked)
+                        {
+                            cmdString = "Insert Into Invoice(date,total,BookingReference) ";
+                            cmdString += "Values(@date,@total,@BookingReference)";
+                            cmd = new SqlCommand(cmdString, conn);
+                            cmd.Parameters.Add(new SqlParameter("@date", today));
+                            cmd.Parameters.Add(new SqlParameter("@total", total));
+                            cmd.Parameters.Add(new SqlParameter("@BookingReference", reference));
+                            cmd.ExecuteNonQuery();
+                        }
                         conn.Close();
                     }
                     catch(Exception e)

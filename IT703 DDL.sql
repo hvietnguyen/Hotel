@@ -31,7 +31,7 @@ values('Single Room',2,150),('Double Room',4,250),('Superior Room',2,400);
 Select * from RoomType
 
 -- Table Room
-
+Drop table Room
 CREATE TABLE [Room]
 (
  [RoomID] Int IDENTITY(1,1) NOT NULL,
@@ -59,9 +59,10 @@ Select * from Room
 Select COUNT(*) from Room Where status in (1,2)
 Group By status
 
+Select * from Room r, RoomType t where r.RoomTypeID=t.RoomTypeID
 
 -- Table Customer
-
+Drop table Customer
 CREATE TABLE [Customer]
 (
  [CustomerID] Int IDENTITY(1,1) NOT NULL,
@@ -92,6 +93,7 @@ CREATE TABLE [BookingDetail]
  [BookingDetailID] Int IDENTITY(1,1) NOT NULL,
  [bookingReference] Varchar(50) NULL,
  [bookingMethod] Varchar(20) NOT NULL,
+ [CardDetailID] Int,
  [date] Date NOT NULL,
  [deposit] Numeric(6,2) NULL,
  [checkin] Date NOT NULL,
@@ -108,9 +110,7 @@ ALTER TABLE [BookingDetail] ADD CONSTRAINT [BookingDetail_PK] PRIMARY KEY ([Book
 go
 
 Delete from BookingDetail
-Select * from BookingDetail
-where CustomerID=9 and date=cast('2016-10-27' as date)
-
+Select b.*,c.*,r.*,t.type,t.price,t.occupants from BookingDetail b, Customer c, Room r, RoomType t where b.CustomerID=c.CustomerID and b.RoomID=r.RoomID and r.RoomTypeID=t.RoomTypeID
 
 
 -- Table CarPark
@@ -134,7 +134,6 @@ CREATE TABLE [CardDetail]
  [cardType] Varchar(10) NOT NULL,
  [cardNumber] Varchar(20) NOT NULL,
  [nameHolder] Varchar(50) NOT NULL,
- [BookingDetailID] Int NOT NULL,
  [PaymentID] Int NULL
 )
 go
@@ -161,7 +160,7 @@ ALTER TABLE [Note] ADD CONSTRAINT [Note_PK] PRIMARY KEY ([NoteID])
 go
 
 -- Table Organisation
-
+Drop Table Organisation
 CREATE TABLE [Organisation]
 (
  [OrganisationID] Int IDENTITY(1,1) NOT NULL,
@@ -170,8 +169,8 @@ CREATE TABLE [Organisation]
  [email] Varchar(1) NULL,
  [address] Varchar(50) NULL,
  [city] Varchar(50) NULL,
- [cityInitial] Char(50) NULL,
- [type] Char(1) NOT NULL
+ [country] Char(50) NULL,
+ [type] Char(10) NOT NULL
 )
 go
 
@@ -187,6 +186,9 @@ CREATE TABLE [Employee]
  [EmployeeID] Int IDENTITY(1,1) NOT NULL,
  [firstName] Varchar(50) NOT NULL,
  [lastName] Varchar(50) NOT NULL,
+ [personIdentity] varchar(20) Not Null,
+ [contact] varchar(20) Not NULL,
+ [address] varchar(50) Not Null,
  [AccountID] Int NULL
 )
 go
@@ -195,12 +197,13 @@ go
 ALTER TABLE [Employee] ADD CONSTRAINT [Employee_PK] PRIMARY KEY ([EmployeeID])
 go
 
-Insert Into Employee(firstName,lastName,AccountID)
-Values('Viet','Nguyen',1)
+Insert Into Employee(firstName,lastName, personIdentity, contact,address,AccountID)
+Values('Viet','Nguyen', 'AT456789', '02102990073','253 Spey Street, Invercargill',1)
 
-Select * From Employee
+select * from Employee
 
 -- Table Account
+Drop table Account
 CREATE TABLE [Account]
 (
  [AccountID] Int IDENTITY(1,1) NOT NULL,
@@ -214,19 +217,22 @@ go
 ALTER TABLE [Account] ADD CONSTRAINT [Account_PK] PRIMARY KEY ([AccountID])
 go
 
+Delete from Account
 Insert Into Account(account,roleName,pass)
 Values('hviet','Manager','123456')
 
-Select e.EmployeeID, e.firstName, e.lastName, a.roleName from Account a, Employee e
+Select * from Account
+
+Select e.EmployeeID, e.firstName, e.lastName, a.roleName from Account a, Employee e Where a.account='NNguyen9688' and a.pass='N2016' and a.AccountID=e.AccountID
 
 -- Table Invoice
-
+Drop table Invoice
 CREATE TABLE [Invoice]
 (
  [InvoiceID] Int IDENTITY(1,1) NOT NULL,
  [date] Date NOT NULL,
  [total] Numeric(6,2) NOT NULL,
- [BookingDetailID] Int NOT NULL
+ [BookingReference] varchar(50) NOT NULL
 )
 go
 -- Add keys for table Invoice

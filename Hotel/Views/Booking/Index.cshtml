@@ -1,0 +1,102 @@
+﻿@model IEnumerable<Hotel.Models.Booking>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_layoutAdmin.cshtml";
+}
+<div class="modal-body">
+    <h2>View</h2>
+
+    @*<p>
+        @Html.ActionLink("Create New", "Create")
+    </p>*@
+    <div id="Booking">
+        <table class="table table-striped">
+            <tr>
+                <th>
+                    Booking Reference
+                </th>
+                <th>
+                    Booking Method
+                </th>
+                <th>
+                    Date
+                </th>
+                <th>
+                    Deposit
+                </th>
+                <th>
+                    Check-in
+                </th>
+                <th>
+                    Check-out
+                </th>
+                <th>
+                    First name
+                </th>
+                <th>
+                    Last name
+                </th>
+                <th>
+                    Identity
+                </th>
+                <th>
+                    Room
+                </th>
+                <th>
+                    Type
+                </th>
+                <th>
+                    Price
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BookingReference)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BookingMethod)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Deposit)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Checkin)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Checkout)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Identity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RoomNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RoomType)
+                    </td>
+                    <td>
+                        NZD @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+                    @*<td>
+                        @Html.ActionLink("Details", "Details", new { id = item.BookingID })
+                    </td>*@
+                </tr>
+            }
+
+        </table>
+    </div>
+</div>

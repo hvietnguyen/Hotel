@@ -1,0 +1,142 @@
+﻿@model Hotel.Models.Room
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_layoutAdmin.cshtml";
+    var role = TempData["Role"];
+    TempData.Keep("Role");
+}
+<div class="modal-body">
+    <h2>Details</h2>
+    <br />
+    <div class="modal-dialog">
+        <h3>Room</h3>
+        <hr />
+        @using (Html.BeginForm("UpdateStatus", "Room", FormMethod.Post, new { @id = "UpdateStatusForm" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                <input type="hidden" name="roomID" id="roomID" value="@Model.RoomID" />
+                <lable for="room">Room Number</lable>
+                <p class="text-info" id="room">@Model.RoomNumber</p>
+                <lable for="roomtype">Room Number</lable>
+                <p class="text-info" id="roomtype">@Model.RoomType</p>
+                <lable for="roomtype">Room Number</lable>
+                <select name="status" id="status" class="dropdown-header">
+                    @{
+                        if (role.ToString() == "RoomKeeper")
+                        {
+                            if (Model.Status.Contains("Vacant"))
+                            {
+                                if (Model.Status.Contains("Clean"))
+                                {
+                                    <option value="1" selected>Vacant Clean</option>
+                                    <option value="2">Vacant Dirty</option>
+                                }
+                                else
+                                {
+                                    <option value="2" selected>Vacant Dirty</option>
+                                    <option value="1">Vacant Clean</option>
+                                }
+                            }
+                            else if (Model.Status.Contains("Occupied"))
+                            {
+                                if (Model.Status.Contains("Clean"))
+                                {
+                                    <option value="3" selected>Occupied Clean</option>
+                                    <option value="4">Occupied Dirty</option>
+                                }
+                                else
+                                {
+                                    <option value="4" selected>Occupied Dirty</option>
+                                    <option value="3">Occupied Clean</option>
+                                }
+                            }
+                        }
+                        else if (role.ToString() == "Receptionist")
+                        {
+                            if (Model.Status.Contains("Clean"))
+                            {
+                                if (Model.Status.Contains("Vacant"))
+                                {
+                                    <option value="1" selected>Vacant Clean</option>
+                                    <option value="3">Occupied Clean</option>
+                                }
+                                else
+                                {
+                                    <option value="3" selected>Occupied Clean</option>
+                                    <option value="1">Vacant Clean</option>
+                                }
+                            }
+                            else if (Model.Status.Contains("Dirty"))
+                            {
+                                if (Model.Status.Contains("Vacant"))
+                                {
+                                    <option value="2" selected>Vacant Dirty</option>
+                                    <option value="4">Occupied Dirty</option>
+                                }
+                                else
+                                {
+                                    <option value="4" selected>Occupied Dirty</option>
+                                    <option value="2">Vacant Dirty</option>
+                                }
+                            }
+                        }
+                        else if (role.ToString() == "Manager")
+                        {
+                            if (Model.Status.Contains("Vacant Clean"))
+                            {
+                                <option value="1" selected>Vacant Clean</option>
+                                <option value="2">Vacant Dirty</option>
+                                <option value="3">Occupied Clean</option>
+                                <option value="4">Occupied Dirty</option>
+                                <option value="5">Maintenance</option>
+                            }
+                            else if (Model.Status.Contains("Vacant Dirty"))
+                            {
+                                <option value="1">Vacant Clean</option>
+                                <option value="2" Select>Vacant Dirty</option>
+                                <option value="3">Occupied Clean</option>
+                                <option value="4">Occupied Dirty</option>
+                                <option value="5">Maintenance</option>
+                            }
+                            else if (Model.Status.Contains("Occupied Clean"))
+                            {
+                                <option value="1">Vacant Clean</option>
+                                <option value="2">Vacant Dirty</option>
+                                <option value="3" selected>Occupied Clean</option>
+                                <option value="4">Occupied Dirty</option>
+                                <option value="5">Maintenance</option>
+                            }
+                            else if (Model.Status.Contains("Occupied Dirty"))
+                            {
+                                <option value="1">Vacant Clean</option>
+                                <option value="2">Vacant Dirty</option>
+                                <option value="3">Occupied Clean</option>
+                                <option value="4" selected>Occupied Dirty</option>
+                                <option value="5">Maintenance</option>
+                            }
+                            else if (Model.Status.Contains("Maintenance"))
+                            {
+                                <option value="1">Vacant Clean</option>
+                                <option value="2">Vacant Dirty</option>
+                                <option value="3">Occupied Clean</option>
+                                <option value="4">Occupied Dirty</option>
+                                <option value="5" selected>Maintenance</option>
+                            }
+                        }
+                    }
+                </select>
+            </div>
+            <br />
+            <div>
+                <button id="submit" class="btn btn-group-justified">
+                    Submit <span class="glyphicon glyphicon-ok"></span>
+                </button>
+            </div>
+        }
+    </div>
+    <p>
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+</div>

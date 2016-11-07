@@ -17,13 +17,34 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Tomive", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Tomive", "Admin", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse" id="myNavbar">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Admin", "Admin", "Home")</li>
-                    <li>@Html.ActionLink("Room", "Index", "Room")</li>
-                    <li>@Html.ActionLink("Booking", "Index", "Booking")</li>
+                    @{
+                        var role = TempData["Role"] as string;
+                        TempData.Keep("Role");
+                        if (role != null)
+                        {
+                            if (role == "RoomKeeper")
+                            {
+                                <li>@Html.ActionLink("Rooms", "Index", "Room")</li>
+                            }
+                            else if (role == "Receptionist")
+                            {
+                                <li>@Html.ActionLink("Rooms", "Index", "Room")</li>
+                                <li>@Html.ActionLink("Booking", "Index", "Booking")</li>
+                            }
+                            else if (role == "Manager")
+                            {
+                                <li>@Html.ActionLink("Rooms", "Index", "Room")</li>
+                                <li>@Html.ActionLink("Booking", "Index", "Booking")</li>
+                                <li>@Html.ActionLink("Employees", "Index", "Employee")</li>
+                            }
+                        }
+
+                    }
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
@@ -32,6 +53,31 @@
     <div id="renderBody">
         @RenderBody()
     </div>
+    <!-- Add Google Maps -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBteg919jwjYPsvKrN28cGdlCupGs7iVJ4"></script>
+    <script>
+        var myCenter = new google.maps.LatLng(-46.4098816, 168.359503);
+
+        function initialize() {
+            var mapProp = {
+                center: myCenter,
+                zoom: 12,
+                scrollwheel: false,
+                draggable: false,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+
+            var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+
+            var marker = new google.maps.Marker({
+                position: myCenter,
+            });
+
+            marker.setMap(map);
+        }
+
+        google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
     <footer class="text-center">
         <a class="up-arrow" href="#myPage" data-toggle="tooltip" title="TO TOP">
             <span class="glyphicon glyphicon-chevron-up"></span>

@@ -36,6 +36,24 @@ namespace Hotel.Controllers
 
         public ActionResult Admin()
         {
+            string status = "";
+            ViewBag.Confirm = TempData["Confirm"] as string;
+            TempData["Confirm"] = "";
+            using (conn = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    status += GetRoomStatus(1) + ".";
+                    status += GetRoomStatus(2) + ".";
+                    status += GetRoomStatus(3) + ".";
+                }
+                catch (Exception e)
+                {
+                    status = e.Message.ToString();
+                }
+                conn.Close();
+                ViewBag.Status = status;
+            }
             return View();
         }
         string GetRoomStatus(int roomTypeID)

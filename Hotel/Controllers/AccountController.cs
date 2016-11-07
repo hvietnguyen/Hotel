@@ -82,7 +82,7 @@ namespace Hotel.Controllers
                     try
                     {
                         conn.Open();
-                        string cmdString = "Select e.EmployeeID, e.firstName, e.lastName, a.roleName from Account a, Employee e Where a.account='" + acc+"' and a.pass='"+pass+"'";
+                        string cmdString = "Select e.EmployeeID, e.firstName, e.lastName, a.roleName from Account a, Employee e Where a.account='" + acc+"' and a.pass='"+pass+"' "+ "and a.AccountID = e.AccountID";
                         SqlCommand cmd = new SqlCommand(cmdString, conn);
                         SqlDataReader rd = cmd.ExecuteReader();
                         if (rd.HasRows)
